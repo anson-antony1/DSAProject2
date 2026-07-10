@@ -52,15 +52,21 @@ def find_arbitrage(graph):
     return None
 
 
-# Follow the next-hop grid to rebuild the cycle that starts and ends at i.
+# Follow the next-hop grid to rebuild the cycle.
+# Under a negative cycle the path can loop before reaching the start,
+# so we stop at the first currency we visit twice and keep that loop.
 def build_cycle(nxt, vertices, start):
-    cycle = [vertices[start]]
-    step = nxt[start][start]
+    order = []
+    node = start
 
-    # Keep hopping until we return to the start currency.
-    while step != start:
-        cycle.append(vertices[step])
-        step = nxt[step][start]
+    # Walk the next hops until we land on a currency we already visited.
+    while node not in order:
+        order.append(node)
+        node = nxt[node][start]
 
-    cycle.append(vertices[start])
-    return cycle
+    # The repeated currency marks the loop. Cut off anything before it.
+    loop_start = order.index(node)
+    cycle = order[loop_start:]
+    cycle.append(node)
+
+    return [vertices[i] for i in cycle]
