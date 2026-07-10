@@ -1,5 +1,8 @@
 import time
 
+import matplotlib
+# Use a backend that saves to a file instead of opening a window.
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 import bellman_ford
