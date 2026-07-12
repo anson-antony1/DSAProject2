@@ -1,7 +1,7 @@
 import time
 
 import matplotlib
-# Use a backend that saves to a file instead of opening a window.
+# Save charts to a file instead of opening a window.
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
@@ -10,7 +10,7 @@ import floyd_warshall
 from data_loader import make_random_graph
 
 
-# Time how long one algorithm takes on a single graph.
+# Times how long one algorithm takes on a single graph.
 def time_run(algorithm, graph):
     start = time.perf_counter()
     algorithm(graph)
@@ -18,11 +18,12 @@ def time_run(algorithm, graph):
     return end - start
 
 
-# Run both algorithms on graphs of growing size and collect the times.
+# Runs both algorithms on bigger and bigger graphs and collects the times.
 def run_benchmark(sizes):
     bf_times = []
     fw_times = []
 
+    # Time each algorithm on a random graph of each size.
     for n in sizes:
         graph = make_random_graph(n)
 
@@ -38,7 +39,7 @@ def run_benchmark(sizes):
     return bf_times, fw_times
 
 
-# Draw the runtime comparison chart and save it to a file.
+# Draws the runtime comparison chart and saves it to a file.
 def make_chart(sizes, bf_times, fw_times):
     plt.plot(sizes, bf_times, marker="o", label="Bellman-Ford")
     plt.plot(sizes, fw_times, marker="o", label="Floyd-Warshall")
@@ -52,6 +53,7 @@ def make_chart(sizes, bf_times, fw_times):
 
 
 def main():
+    # Benchmark a few graph sizes and chart the results.
     sizes = [10, 25, 50, 75, 100]
     bf_times, fw_times = run_benchmark(sizes)
     make_chart(sizes, bf_times, fw_times)

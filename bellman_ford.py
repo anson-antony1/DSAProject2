@@ -1,13 +1,11 @@
 from data_loader import get_vertices
 
 
-# Look for a negative cycle using Bellman-Ford.
-# A negative cycle in the -log(rate) graph is an arbitrage opportunity.
-# Returns the list of currencies in the cycle, or None.
+# Uses Bellman-Ford to look for a negative cycle, which means arbitrage.
 def find_arbitrage(graph):
     vertices = get_vertices(graph)
 
-    # Start every distance at 0 so the search can begin from any currency.
+    # Start every distance at 0 so any currency can be the start.
     distance = {}
     parent = {}
     for v in vertices:
@@ -23,7 +21,7 @@ def find_arbitrage(graph):
                     distance[dst] = distance[src] + weight
                     parent[dst] = src
 
-    # One more pass. If an edge can still relax, a negative cycle exists.
+    # One extra pass, if anything still improves there is a negative cycle.
     for src in graph:
         for dst in graph[src]:
             weight = graph[src][dst]
@@ -33,14 +31,14 @@ def find_arbitrage(graph):
     return None
 
 
-# Walk backwards through the parents to rebuild the cycle.
+# Walks back through the parents to rebuild the cycle.
 def build_cycle(parent, start):
-    # Step back V times to make sure we are inside the cycle.
+    # Step back enough times to make sure we are inside the cycle.
     node = start
     for i in range(len(parent)):
         node = parent[node]
 
-    # Collect the currencies until we come back to the start node.
+    # Collect currencies until we loop back to where we started.
     cycle = [node]
     current = parent[node]
     while current != node:

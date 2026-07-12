@@ -5,8 +5,7 @@ import floyd_warshall
 from data_loader import load_rates
 
 
-# Turn a cycle of currencies into a profit percentage.
-# Multiply the rates along the cycle. Anything above 1 is a profit.
+# Multiplies the rates around the cycle to get the profit percent.
 def cycle_profit(graph, cycle):
     product = 1.0
     for i in range(len(cycle) - 1):
@@ -18,7 +17,7 @@ def cycle_profit(graph, cycle):
     return (product - 1) * 100
 
 
-# Print the result of one algorithm in a readable way.
+# Prints what one algorithm found in a readable way.
 def show_result(name, graph, cycle):
     print(name)
     if cycle is None:
@@ -32,6 +31,7 @@ def show_result(name, graph, cycle):
 
 
 def main():
+    # Load the rates and run both algorithms on the same graph.
     graph = load_rates("sample_rates.csv")
 
     bf_cycle = bellman_ford.find_arbitrage(graph)
